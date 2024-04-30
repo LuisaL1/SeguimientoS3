@@ -1,6 +1,8 @@
 package edu.cue.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L; // Esto es opcional pero recomendado
@@ -9,7 +11,7 @@ public class Cliente implements Serializable {
     private String lastName;
     private String ID;
     private String address;
-    private CestaDeCompra cestaDeCompra; // Asegúrate de que CestaDeCompra también sea Serializable
+    private List<String> listaArticulos = new ArrayList<>();
 
     public Cliente(String name, String lastName, String ID, String address) {
         this.name = name;
@@ -51,12 +53,12 @@ public class Cliente implements Serializable {
         this.address = address;
     }
 
-    public CestaDeCompra getCestaDeCompra() {
-        return cestaDeCompra;
+    public List<String> getListaArticulos() {
+        return listaArticulos;
     }
 
-    public void setCestaDeCompra(CestaDeCompra cestaDeCompra) {
-        this.cestaDeCompra = cestaDeCompra;
+    public void setListaArticulos(List<String> listaArticulos) {
+        this.listaArticulos = listaArticulos;
     }
 }
 

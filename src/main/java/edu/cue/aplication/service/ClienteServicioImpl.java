@@ -4,13 +4,10 @@ import edu.cue.domain.Articulo;
 import edu.cue.domain.Cliente;
 import edu.cue.infraestructure.repository.ClienteRepositoryImpl;
 
+import java.util.List;
+
 public class ClienteServicioImpl implements ClienteServicio{
     private final ClienteRepositoryImpl clienteRepository = new ClienteRepositoryImpl();
-    private final ArticuloServiciolmpl articuloServiciolmpl;
-
-    public ClienteServicioImpl(ArticuloServiciolmpl articuloServiciolmpl) {
-        this.articuloServiciolmpl = articuloServiciolmpl;
-    }
 
     @Override
     public void agregarProductoCesta(String idCliente, String idProducto) throws Exception {
@@ -18,9 +15,7 @@ public class ClienteServicioImpl implements ClienteServicio{
         if (cliente == null){
             throw new Exception("No hay un cliente");
         }
-        Articulo articulo = articuloServiciolmpl.obtenerArticulo(idProducto);
-
-        cliente.getCestaDeCompra().getArticulos().add(articulo);
+        cliente.getListaArticulos().add(idProducto);
 
         clienteRepository.save(cliente);
 
@@ -32,12 +27,23 @@ public class ClienteServicioImpl implements ClienteServicio{
         if (cliente == null){
             throw new Exception("No hay un cliente");
         }
-        Articulo articulo = articuloServiciolmpl.obtenerArticulo(idProducto);
+        cliente.getListaArticulos().remove(idProducto);
 
-        if (cliente.getCestaDeCompra().getArticulos().contains(articulo)){
-            cliente.getCestaDeCompra().getArticulos().remove(articulo);
+        clienteRepository.save(cliente);
+    }
+
+    @Override
+    public List<Cliente> obtenerClientes(){
+        return clienteRepository.findAll();
+    }
+
+    @Override
+    public void crearCliente(String nombre, String apellido, String cedula, String direccion) throws Exception {
+        //Faltan validaciones
+        if (clienteRepository.findById(cedula) != null){
+            throw new Exception("Ya hay un cliente con esta identificación");
         }
-
+        Cliente cliente = new Cliente(nombre,apellido,cedula,direccion);
         clienteRepository.save(cliente);
     }
 }
